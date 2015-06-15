@@ -19,7 +19,7 @@
 			{
 				console.log(event);
 				var text = event.target.text.value;
-				console.log(text);
+			
 				Tasks.insert(
 				{
 					text:text,
@@ -31,6 +31,10 @@
 				
 				// Prevent default form submit
 				return false;
+			},
+			"change .hide-completed input":function(event)
+			{
+				Session.set("hideCompleted"), event.target.checked);
 			}
 		});
 		
@@ -44,6 +48,25 @@
 			"click .delete": function()
 			{
 				Tasks.remove(this._id);
+			}
+		});
+		
+		Template.body.helpers(
+		{
+			tasks: function()
+			{
+				if(Session.get("hideCompleted"))
+				{
+					return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+				}
+				else
+				{
+					return Tasks.find({}, {sor: {createdAt: -1}});
+				}
+			}
+			hideCompleted: function()
+			{
+				return Session.get("hideCompleted");
 			}
 		});
 	}

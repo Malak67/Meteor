@@ -3,13 +3,32 @@
 
 	if (Meteor.isClient) 
 	{
-	  Template.body.helpers(
-	  {
-		tasks: function()
+		
+		Template.body.helpers(
 		{
-			return Tasks.find({}, {sort: {createdAt: -1}});
-		}
-	  });
+			
+			tasks: function()
+			{
+				if(Session.get("hideCompleted"))
+				{
+					return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+				}
+				else
+				{
+					return Tasks.find({}, {sort: {createdAt: -1}});
+				}
+			},
+
+			hideCompleted: function()
+			{
+				return Session.get("hideCompleted");
+			},
+
+			incompleteCount: function()
+			{
+				return Tasks.find({checked: {$ne: true}}).count();
+			}
+		});
 
  
 		Template.body.events(
@@ -17,13 +36,14 @@
 			// This function is called when a new task form is submitted
 			"submit .new-task": function (event)
 			{
-				console.log(event);
 				var text = event.target.text.value;
 			
 				Tasks.insert(
 				{
 					text:text,
-					createdAt: new Date() // current time
+					createdAt: new Date(), 				// current time
+					owner: Meteor.userId(), 			// _id of logged user
+					username: Meteor.user().username 	// username of Logged in user
 				});
 				
 				// Clear form
@@ -32,9 +52,9 @@
 				// Prevent default form submit
 				return false;
 			},
-			"change .hide-completed input":function(event)
+			"change .hide-completed input": function (event)
 			{
-				Session.set("hideCompleted"), event.target.checked);
+				Session.set("hideCompleted", event.target.checked);
 			}
 		});
 		
@@ -51,24 +71,12 @@
 			}
 		});
 		
-		Template.body.helpers(
+		// This will enable login in without needing an email
+		Accounts.ui.config(
 		{
-			tasks: function()
-			{
-				if(Session.get("hideCompleted"))
-				{
-					return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-				}
-				else
-				{
-					return Tasks.find({}, {sor: {createdAt: -1}});
-				}
-			}
-			hideCompleted: function()
-			{
-				return Session.get("hideCompleted");
-			}
+			passwordSignupFields: "USERNAME_ONLY"
 		});
+	
 	}
 	
 	if (Meteor.isServer) {

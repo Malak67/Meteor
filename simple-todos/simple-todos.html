@@ -7,20 +7,27 @@
 	<div class="container">
 	
 		<header>
-		
-			<h1>ToDo list</h1>
+			<!-- IncompleteCount is a variable defined as a closure in the body helpers -->
+			<h1>ToDo list ({{incompleteCount}})</h1>
 			
+			<!-- hideCompleted holds the inputs in the Session -->
 			<label class="hide-completed">
 				<input type="checkbox" checked="{{hideCompleted}}" />
 				Hide Completed Tasks
 			</label>
 			
+			<!-- this will add a button with a form for login -->
+			{{> loginButtons}}
+			
+			{{#if currentUser}}
 			<form class="new-task">
 				<input type="text" name="text" placeholder = "Type to add new tasks" />
 			</form>
+			{{/if}}
 			
 		</header>
 		
+		<!-- loop through the task variable defined as a closure in the body helpers -->
 		<ul>
 			{{ #each tasks}}
 				{{> task}}
@@ -35,6 +42,6 @@
   <li class="{{#if checked}} checked{{/if}}">
 	<button class="delete">&times;</button>
 	<input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-	<span class="text">{{text}}</span>
+	<span class="text"><strong>{{username}}</strong>-{{text}}</span>
   </li> 
 </template>

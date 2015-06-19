@@ -38,13 +38,7 @@
 			{
 				var text = event.target.text.value;
 			
-				Tasks.insert(
-				{
-					text:text,
-					createdAt: new Date(), 				// current time
-					owner: Meteor.userId(), 			// _id of logged user
-					username: Meteor.user().username 	// username of Logged in user
-				});
+				Meteor.call("addTask", text);
 				
 				// Clear form
 				event.target.text.value = "";
@@ -62,12 +56,12 @@
 		{
 			"click .toggle-checked": function()
 			{
-				Tasks.update(this._id, {$set:{checked: ! this.checked}});
+				Meteor.call("setChecked", this._id, ! this.checked);
 			},
 			
 			"click .delete": function()
 			{
-				Tasks.remove(this._id);
+				Meteor.call("deleteTask", this._id);
 			}
 		});
 		
@@ -79,8 +73,40 @@
 	
 	}
 	
-	if (Meteor.isServer) {
-	  Meteor.startup(function () {
-		// code to run on server at startup
-	  });
+	Meteor.methods(
+	{
+			addTask: function(text)
+			{
+				//Make sure the user is Logged in before inserting a Tasks
+				if (!Meteor.userId())
+				{
+					throw new Meteor.Error("not-authorized");
+				}
+			
+				Tasks.insert(
+				{
+					text:text,
+					createdAt: new Date(),
+					owner: Meteor.userId(),
+					username: Meteor.user().username
+				});
+			},	
+			
+			deleteTask: function(taskId)
+			{
+				Tasks.remove(taskId);
+			},
+			
+			setChecked: function (taskId, setChecked)
+			{
+				Tasks.update(taskId, {$set: {checked: setChecked}});
+			}
+	});
+	
+	if (Meteor.isServer) 
+	{
+		Meteor.startup(function () 
+		{
+			// code to run on server at startup
+		});
 	}

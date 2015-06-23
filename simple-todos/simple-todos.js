@@ -4,9 +4,11 @@
 	if (Meteor.isClient) 
 	{
 		
+		Meteor.subscribe("tasks");
+		
 		Template.body.helpers(
 		{
-			
+				
 			tasks: function()
 			{
 				if(Session.get("hideCompleted"))
@@ -46,10 +48,12 @@
 				// Prevent default form submit
 				return false;
 			},
+			
 			"change .hide-completed input": function (event)
 			{
 				Session.set("hideCompleted", event.target.checked);
 			}
+			
 		});
 		
 		Template.task.events(
@@ -62,51 +66,98 @@
 			"click .delete": function()
 			{
 				Meteor.call("deleteTask", this._id);
+			},
+			
+			"click .toggle-private": function()
+			{
+				Meteor.call("setPrivate", this._id, ! this.private);
 			}
 		});
 		
+		Template.task.helpers(
+		{
+			isOwner: function () 
+			{
+				return this.owner === Meteor.userId();
+			}
+		});
+
 		// This will enable login in without needing an email
 		Accounts.ui.config(
 		{
 			passwordSignupFields: "USERNAME_ONLY"
 		});
-	
+		
+		
 	}
 	
 	Meteor.methods(
 	{
-			addTask: function(text)
+		addTask: function(text)
+		{
+			//Make sure the user is Logged in before inserting a Tasks
+			if (!Meteor.userId())
 			{
-				//Make sure the user is Logged in before inserting a Tasks
-				if (!Meteor.userId())
-				{
-					throw new Meteor.Error("not-authorized");
-				}
-			
-				Tasks.insert(
-				{
-					text:text,
-					createdAt: new Date(),
-					owner: Meteor.userId(),
-					username: Meteor.user().username
-				});
-			},	
-			
-			deleteTask: function(taskId)
-			{
-				Tasks.remove(taskId);
-			},
-			
-			setChecked: function (taskId, setChecked)
-			{
-				Tasks.update(taskId, {$set: {checked: setChecked}});
+				throw new Meteor.Error("not-authorized");
 			}
+		
+			Tasks.insert(
+			{
+				text:text,
+				createdAt: new Date(),
+				owner: Meteor.userId(),
+				username: Meteor.user().username
+			});
+		},	
+		
+		deleteTask: function(taskId)
+		{
+			var task = Tasks.findOne(taskId);
+			
+			if(task.private && task.owner !== Meteor.userId())
+			{
+				throw new Meteor.Error("not-authorized");
+			}
+			
+			
+			Tasks.remove(taskId);
+		},
+		
+		setChecked: function (taskId, setChecked)
+		{
+			var task = Tasks.findOne(taskId);
+			
+			if(task.private && task.owner !== MeteorUserId())
+			{
+				throw new Meteor.Error("not-authorized");
+			}
+			
+			Tasks.update(taskId, {$set: {checked: setChecked}});
+		},
+		
+		setPrivate: function(taskId, setToPrivate)
+		{
+			var task = Tasks.findOne(taskId);
+			
+			if(task.owner !== Meteor.userId())
+			{
+				throw new Meteor.Error("not authorized");
+			}
+			
+			Tasks.update(taskId, {$set: {private: setToPrivate}});
+		}
 	});
 	
 	if (Meteor.isServer) 
 	{
-		Meteor.startup(function () 
+		Meteor.publish("tasks", function()
 		{
-			// code to run on server at startup
+			return Tasks.find(
+			{
+				$or: [
+					{ private: {$ne: true} },
+					{ owner: this.userId }
+				]
+			});
 		});
 	}

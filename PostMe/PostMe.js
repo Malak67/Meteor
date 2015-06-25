@@ -10,36 +10,53 @@
 		function($scope, $meteor)
 		{
 			$scope.posts = $meteor.collection(Posts);
+			
+			$scope.addPost = function(new_post)
+			{
+				//Make sure the user is Logged in before inserting a Tasks
+				// if (!Meteor.userId())
+				// {
+					// throw new Meteor.Error("not-authorized");
+				// }
+			
+				Posts.insert(
+				{
+					name:new_post.name,
+					selfie:new_post.selfie,
+					location:new_post.location,
+					createdAt: new Date(),
+					// owner: Meteor.userId(),
+					// username: Meteor.user().username
+				});
+			},
+			
+			$scope.remove = function(post)
+			{
+				$scope.posts.remove(post);
+			};
+			
+			$scope.addSelfie = function(newPostSelfie)
+			{
+				$scope.newPost.selfie = 'selfie nou';
+			};
+			
+			$scope.addLocation = function(newPostLocation)
+			{
+				$scope.newPost.location = 'location nou';
+			};
+			
+			//function that removes all posts from that user -which is logged in
 
 		}]);
+	
 	}
-		
+	
+
 	if (Meteor.isServer) 
 	{ 	
 		Meteor.startup(function()
 		{
-			var posts = [
-				{
-					'name' : "I`m in Bucharest",
-					'picture' : "Insert Picture",
-					'location': "get location"
-				},
-				{
-					'name' : "I`m in Paris",
-					'picture' : "Insert Picture",
-					'location': "get location"
-				},
-				{
-					'name' : "I`m in London",
-					'picture' : "Insert Picture",
-					'location': "get location"
-				}
-			];	
-			
-			for(var i=0; i< posts.length; i++)
-			{
-				Posts.insert({name: posts[i].name, camera: posts[i].camera, location: posts[i].location});
-			}
+			//
 		})
 		
 		

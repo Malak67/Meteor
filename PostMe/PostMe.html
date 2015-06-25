@@ -1,8 +1,14 @@
 	<head>
 		<title>PostMe</title>
+		<base href="/">
 	</head>
 
 	<body ng-app="PostMe">
-		<div ng-include="'PostMe.ng.html'"></div>
+		<div>
+			<h1>
+				<a href="/posts">Home</a>
+			</h1>
+			<div ui-view></div>
+		</div>
 	</body>
 

@@ -1,14 +1,8 @@
-<head>
-  <title>PostMe</title>
-</head>
+	<head>
+		<title>PostMe</title>
+	</head>
 
-<body ng-app="PostMe">
-  <h1>Welcome to Meteor!</h1>
+	<body ng-app="PostMe">
+		<div ng-include="'PostMe.ng.html'"></div>
+	</body>
 
-  {{> hello}}
-</body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>

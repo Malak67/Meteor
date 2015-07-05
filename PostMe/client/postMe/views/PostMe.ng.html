@@ -1,0 +1,112 @@
+	
+	<div class="container">
+		<div class="page-header">
+			<h1><a href="/postsGroups">Post Groups</a></h1>
+		</div>
+		
+		<h3 class="addPostHeader"> <code><strong>Add</strong></code> a new Post  </h3>
+			
+		<div class="formPost">
+		
+			<form class="form-horizontal">
+			
+				<div class = "form-group">
+					<label for="pName" class = "col-sm-2 control-label">Post</label>
+					 <div class="col-sm-10">
+						<input ng-model="newPost.name" class="form-control" id="pName" placeholder="Name">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="pSelfie" class = "col-sm-2 control-label">Selfie</label>
+					<div class="col-sm-10">
+						<button class="pgbutton btn btn-warning" ng-click="addSelfie('ceva')" id="pSelfie">
+							<span class="glyphicon glyphicon-camera" style="vertical-align:middle"></span>
+						</button>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="pLocation" class = "col-sm-2 control-label">Location</label>
+					<div class="col-sm-10">
+						<button class="pgbutton btn btn-success" ng-click="addLocation('altceva')" id="pLocation">
+							<span class="glyphicon glyphicon-globe" style="vertical-align:middle"></span>
+						</button>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button class="pgbutton btn btn-info" ng-click="newPost.groupID = postGroupID; newPost.owner = $root.currentUser._id; addPost(newPost)">
+							<span class="glyphicon glyphicon-plus" style="vertical-align:middle"></span>
+						</button>
+					</div>
+				</div>
+				
+			</form>
+			
+		</div>
+		
+		<hr>
+		
+		<div class="postContainer">
+		
+			<table class="pgrouptable table table-hover">
+				
+				<thead>
+					<tr>
+						<td>
+							User
+						</td>
+						<td>
+							Name
+						</td>
+						<td>
+							Selfie
+						</td>
+						<td>
+							Location
+						</td>
+						<td>
+							Remove
+						</td>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr ng-repeat="post in posts | filter:postGroupID">
+					
+						<td  class="postUser">
+							{{post.username}}
+						</td>
+						
+						<td class="postName">
+							{{post.name}}
+						</td>
+						
+						<td class="postSelfie">
+							{{post.selfie}}
+						</td>
+						
+						
+						<td class="postLocation">
+							{{post.location}}
+						</td>
+						
+						<td class="postDelete">
+							<button type="button" class="pgbutton btn btn-sm btn-danger" ng-click="remove(post)">
+								<span class="glyphicon glyphicon-trash" style="vertical-align:middle"></span>
+							</button>
+						</td>
+						
+					</tr>
+				</tbody>
+				
+			</table>
+			
+		</div>
+		
+		<hr>
+		
+	</div>
+	

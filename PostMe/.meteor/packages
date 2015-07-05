@@ -5,9 +5,11 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
-insecure
 urigo:angular
 mdg:geolocation
 mdg:camera
 angularui:angular-ui-router
+twbs:bootstrap
+mrt:bootstrap-select
+accounts-ui
+accounts-password

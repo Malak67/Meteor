@@ -64,3 +64,13 @@
 
 .angular-google-map-container {
 }
+
+.s-alert-error{
+    background: #ff0077;  /* your background color here */
+    color: #fff  /* your text color here */
+}
+
+.s-alert-success{
+    background: #01aaba;  /* your background color here */
+    color: #fff  /* your text color here */
+}

@@ -10,6 +10,67 @@
 			<h4> Please <mark><strong>create</strong></mark> a Post Group </h4>
 		</div>
 		
+		<h3 ng-if="updatePostGroup != true"> Create a <kbd><strong>new</strong></kbd> Post Group </h3>
+		<h3 ng-if="updatePostGroup == true"> Update Post Group </h3>
+		
+		<div class="formPostGroup">
+		
+			<form class="form-horizontal" id="postGroupForm">
+			
+				<div class = "form-group">
+					<label for="pgName" class = "col-sm-2 control-label">Post Group Name</label>
+					 <div class="col-sm-10">
+						<input ng-model="newPostGroup.name" class="form-control" id="pgName" placeholder="Name">
+					</div>
+				</div>
+				
+				<div class = "form-group">	
+					<label for="pgType" class = "col-sm-2 control-label">Post Group Type</label>
+					<div class="col-sm-10">
+						<select id="pgType" class="form-control" ng-init="group_select = GroupTypes[0];" ng-model="group_select" ng-options="GroupType.type for GroupType in GroupTypes">
+						</select>
+					</div>
+				</div>
+				
+	
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							<label class="pgPublic"> 
+								<input type="checkbox" ng-model="newPostGroup.public"> Public
+							</label>
+						</div>			
+					</div>			
+				</div>			
+			
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					
+						<div  ng-if="updatePostGroup != true">
+							<button class="addpgroup btn btn-sm btn-success" 
+								ng-click="newPostGroup.type = group_select.type; newPostGroup.owner = $root.currentUser._id; addPostGroup(newPostGroup); newPostGroup.name ='';">
+								Add
+							</button>
+						</div>
+						
+						<div  ng-if="updatePostGroup == true">
+							<button class="addpgroup btn btn-sm btn-success" 
+								ng-click="newPostGroup.type = group_select.type; newPostGroup.owner = $root.currentUser._id; UpdatePostGroup(newPostGroup, editPostGroupId); newPostGroup.name ='';">
+								Update
+							</button>
+						</div>
+						
+					</div>
+				</div>
+					<!--
+					<select data-style="btn-primary" ng-model="new_post_group.type">			
+						<option ng-repeat="item in items" value="{{item.name}}">{{item.name}}</option>
+					</select>
+					-->			 
+			</form>
+			
+		</div>
+		
 		<div ng-if="postGroups !=0">
 			<h3> Please <mark><strong>join</strong></mark> one of the Post Groups below </h3>
 		</div>
@@ -21,8 +82,8 @@
 			<table class="pgrouptable table table-hover">
 				<thead>
 					<tr>
-						<td>Post Group Name</td>
-						<td>Post Group Type</td>
+						<td> Post Group Name </td>
+						<td> Post Group Type </td>
 						<td> Edit </td>
 						<td> Delete </td>
 					</tr>
@@ -44,7 +105,7 @@
 						</td>
 						
 						<td>
-							<button class="pgbutton btn btn-info">
+							<button ng-click="editPostGroup(postGroup._id)" class="pgbutton btn btn-info">
 								<span class="glyphicon glyphicon-pencil" style="vertical-align:middle"></span>
 							</button>
 						</td>
@@ -63,49 +124,6 @@
 			
 		<hr>
 		
-		<h3> Create a <kbd><strong>new</strong></kbd> Post Group </h3>
 		
-		<div class="formPostGroup">
-		
-			<form class="form-horizontal">
-			
-				<div class = "form-group">
-					<label for="pgName" class = "col-sm-2 control-label">Post Group Name</label>
-					 <div class="col-sm-10">
-						<input ng-model="new_post_group.name" class="form-control" id="pgName" placeholder="Name">
-					</div>
-				</div>
-				
-				<div class = "form-group">	
-					<label for="pgType" class = "col-sm-2 control-label">Post Group Type</label>
-					<div class="col-sm-10">
-						<select id="pgType" class="form-control" ng-init="group_select = GroupTypes[0];" ng-model="group_select" ng-options="GroupType.type for GroupType in GroupTypes">
-						</select>
-					</div>
-				</div>
-				
-	
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<div class="checkbox">
-							<label class="pgPublic"> 
-								<input type="checkbox" ng-model="new_post_group.public"> Public
-							</label>
-						</div>			
-					</div>			
-				</div>			
-			
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="addpgroup btn btn-sm btn-success" ng-click="new_post_group.type = group_select.type; new_post_group.owner = $root.currentUser._id; addPostGroup(new_post_group)">Add</button>
-					</div>
-				</div>
-					<!--
-					<select data-style="btn-primary" ng-model="new_post_group.type">			
-						<option ng-repeat="item in items" value="{{item.name}}">{{item.name}}</option>
-					</select>
-					-->			 
-			</form>
-		</div>
 		
 	</div>

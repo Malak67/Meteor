@@ -13,3 +13,12 @@
 		passwordSignupFields: "USERNAME_ONLY"
 	});
 
+	  sAlert.config({
+        effect: 'genie',
+        position: 'bottom',
+        timeout: 1500,
+        html: false,
+        onRouteClose: true,
+        stack: true,
+        offset: 0
+    });

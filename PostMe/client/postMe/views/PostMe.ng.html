@@ -8,7 +8,7 @@
 			
 		<div class="formPost">
 		
-			<form class="form-horizontal">
+			<form class="form-horizontal" id="PostForm">
 			
 				<div class = "form-group">
 					<label for="pName" class = "col-sm-2 control-label">Post</label>
@@ -37,7 +37,7 @@
 				
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button ng-model="newPost.location" class="pgbutton btn btn-info" ng-click="newPost.groupID = postGroupID; newPost.owner = $root.currentUser._id; addPost(newPost)">
+						<button class="pgbutton btn btn-info" ng-click="newPost.groupID = postGroupID; newPost.owner = $root.currentUser._id; addPost(newPost); newPost='';">
 							<span class="glyphicon glyphicon-plus" style="vertical-align:middle"></span>
 						</button>
 					</div>

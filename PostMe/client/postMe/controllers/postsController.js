@@ -22,6 +22,7 @@
 								
 				$scope.addPost = function(new_post)
 				{
+					console.log(new_post);
 					//Make sure the user is Logged in before inserting a Tasks
 					// if (!Meteor.userId())
 					// {
@@ -29,7 +30,8 @@
 					// }
 					if(!new_post.name)
 					{
-						alert("Please add a name to your Post!")
+					//	alert("Please add a name to your Post!");
+						sAlert.error('Name missing!');
 					}
 					else
 					{
@@ -43,6 +45,7 @@
 							owner: new_post.owner,
 							username: Meteor.user().username
 						});
+						sAlert.success('Post added!');
 					}			
 				},
 				
@@ -55,7 +58,8 @@
 				{
 					if(!$scope.newPost)
 					{
-						alert("Please select a name for your post!")
+					//	alert("Please select a name for your post!");
+						sAlert.error('Name missing!');
 					}
 					else
 					{								
@@ -80,9 +84,10 @@
 				
 				$scope.addLocation = function(newPostLocation)
 				{		
-					if(!$scope.newPost)
+					if(!$scope.newPost.name)
 					{
-						alert("Please select a name for your post!")
+						sAlert.error('Name missing!');
+						console.log($scope.newPost.name);
 					}
 					else
 					{
@@ -97,7 +102,6 @@
 								$scope.newPost.location.longitude = position.F;
 								console.log($scope.newPost.location);
 								console.log(position);
-								console.log('cur');
 							});
 						} 
 						else 
